@@ -62,7 +62,7 @@ abstract class IcebergV2WriteTest(
     }
 
     @Test
-//    @Disabled
+    //    @Disabled
     override fun testContainerTypes() {
         super.testContainerTypes()
     }
@@ -82,7 +82,7 @@ abstract class IcebergV2WriteTest(
     }
 
     @Test
-//    @Disabled
+    //    @Disabled
     override fun testUnions() {
         super.testUnions()
     }
