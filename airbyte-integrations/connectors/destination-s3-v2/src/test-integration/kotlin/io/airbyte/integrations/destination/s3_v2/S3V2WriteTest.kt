@@ -129,7 +129,7 @@ class S3V2WriteTestCsvUncompressed :
     override fun testBasicWriteFile() {
         super.testBasicWriteFile()
     }
-    }
+}
 
 class S3V2WriteTestCsvRootLevelFlattening :
     S3V2WriteTest(

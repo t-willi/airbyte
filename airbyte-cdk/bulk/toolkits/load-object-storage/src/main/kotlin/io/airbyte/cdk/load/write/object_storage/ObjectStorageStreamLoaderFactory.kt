@@ -17,10 +17,10 @@ import io.airbyte.cdk.load.file.object_storage.RemoteObject
 import io.airbyte.cdk.load.message.Batch
 import io.airbyte.cdk.load.message.BatchEnvelope
 import io.airbyte.cdk.load.message.DestinationFile
-import io.airbyte.cdk.load.message.object_storage.LoadedObject
-import io.airbyte.cdk.load.message.object_storage.ObjectStorageBatch
 import io.airbyte.cdk.load.message.MultiProducerChannel
 import io.airbyte.cdk.load.message.object_storage.*
+import io.airbyte.cdk.load.message.object_storage.LoadedObject
+import io.airbyte.cdk.load.message.object_storage.ObjectStorageBatch
 import io.airbyte.cdk.load.state.DestinationStateManager
 import io.airbyte.cdk.load.state.StreamProcessingFailed
 import io.airbyte.cdk.load.state.object_storage.ObjectStorageDestinationState
@@ -88,7 +88,6 @@ class ObjectStorageStreamLoader<T : RemoteObject<*>, U : OutputStream>(
         this.fileNumber.set(fileNumber)
     }
 
-
     override suspend fun createBatchAccumulator(): BatchAccumulator {
         return RecordToPartAccumulator(
             pathFactory,
@@ -99,9 +98,10 @@ class ObjectStorageStreamLoader<T : RemoteObject<*>, U : OutputStream>(
         )
     }
 
-    override suspend fun createFileBatchAccumulator(taskLauncher: DestinationTaskLauncher,
-                                           outputQueue: MultiProducerChannel<BatchEnvelope<*>>,): BatchAccumulator =
-        FilePartAccumulator(pathFactory, stream, taskLauncher, outputQueue)
+    override suspend fun createFileBatchAccumulator(
+        taskLauncher: DestinationTaskLauncher,
+        outputQueue: MultiProducerChannel<BatchEnvelope<*>>,
+    ): BatchAccumulator = FilePartAccumulator(pathFactory, stream, taskLauncher, outputQueue)
 
     override suspend fun processFile(file: DestinationFile): Batch {
         if (pathFactory.supportsStaging) {

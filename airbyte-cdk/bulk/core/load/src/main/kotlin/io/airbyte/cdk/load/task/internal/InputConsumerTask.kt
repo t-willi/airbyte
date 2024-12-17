@@ -4,7 +4,6 @@
 
 package io.airbyte.cdk.load.task.internal
 
-import com.google.common.collect.Range
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings
 import io.airbyte.cdk.load.command.DestinationCatalog
 import io.airbyte.cdk.load.command.DestinationStream
@@ -65,7 +64,8 @@ class DefaultInputConsumerTask(
     private val checkpointQueue: QueueWriter<Reserved<CheckpointMessageWrapped>>,
     private val syncManager: SyncManager,
     private val destinationTaskLauncher: DestinationTaskLauncher,
-    @Named("fileMessageQueue") private val fileTransferQueue: MessageQueue<FileTransferQueueMessage>,
+    @Named("fileMessageQueue")
+    private val fileTransferQueue: MessageQueue<FileTransferQueueMessage>,
 ) : InputConsumerTask {
     private val log = KotlinLogging.logger {}
 

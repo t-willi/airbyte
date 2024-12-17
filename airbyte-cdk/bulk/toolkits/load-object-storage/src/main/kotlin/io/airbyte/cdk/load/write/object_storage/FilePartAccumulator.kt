@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 Airbyte, Inc., all rights reserved.
+ */
+
 package io.airbyte.cdk.load.write.object_storage
 
 import com.google.common.collect.Range
@@ -19,16 +23,17 @@ class FilePartAccumulator(
     private val stream: DestinationStream,
     private val taskLauncher: DestinationTaskLauncher,
     private val outputQueue: MultiProducerChannel<BatchEnvelope<*>>,
-): BatchAccumulator {
+) : BatchAccumulator {
     override suspend fun processFilePart(file: DestinationFile, index: Long) {
         val key =
             Path.of(pathFactory.getFinalDirectory(stream), "${file.fileMessage.fileRelativePath}")
                 .toString()
 
-        val part = PartFactory(
-            key = key,
-            fileNumber = index,
-        )
+        val part =
+            PartFactory(
+                key = key,
+                fileNumber = index,
+            )
 
         val localFile = File(file.fileMessage.fileUrl)
         val fileInputStream = localFile.inputStream()
@@ -55,12 +60,13 @@ class FilePartAccumulator(
         localFile.delete()
     }
 
-    private suspend fun handleFilePart(batch: Batch,
-                                       streamDescriptor: DestinationStream.Descriptor,
-                                       index: Long,) {
+    private suspend fun handleFilePart(
+        batch: Batch,
+        streamDescriptor: DestinationStream.Descriptor,
+        index: Long,
+    ) {
 
         val wrapped = BatchEnvelope(batch, Range.singleton(index), streamDescriptor)
         outputQueue.publish(wrapped)
-
     }
 }

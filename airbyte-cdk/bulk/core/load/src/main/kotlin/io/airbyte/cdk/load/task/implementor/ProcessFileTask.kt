@@ -4,7 +4,6 @@
 
 package io.airbyte.cdk.load.task.implementor
 
-import com.google.common.collect.Range
 import io.airbyte.cdk.load.command.DestinationStream
 import io.airbyte.cdk.load.message.BatchEnvelope
 import io.airbyte.cdk.load.message.DestinationFile
@@ -19,7 +18,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import io.micronaut.context.annotation.Secondary
 import jakarta.inject.Named
 import jakarta.inject.Singleton
-import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
 interface ProcessFileTask : ImplementorScope
@@ -38,16 +36,16 @@ class DefaultProcessFileTask(
             inputQueue.consume().collect { (streamDescriptor, file, index) ->
                 val streamLoader = syncManager.getOrAwaitStreamLoader(streamDescriptor)
 
-                val acc = accumulators.getOrPut(streamDescriptor) {
-                    streamLoader.createFileBatchAccumulator(taskLauncher, outputQueue)
-                }
+                val acc =
+                    accumulators.getOrPut(streamDescriptor) {
+                        streamLoader.createFileBatchAccumulator(taskLauncher, outputQueue)
+                    }
 
                 acc.processFilePart(file, index)
             }
         }
     }
 }
-
 
 interface ProcessFileTaskFactory {
     fun make(
@@ -59,7 +57,8 @@ interface ProcessFileTaskFactory {
 @Secondary
 class DefaultFileRecordsTaskFactory(
     private val syncManager: SyncManager,
-    @Named("fileMessageQueue") private val fileTransferQueue: MessageQueue<FileTransferQueueMessage>,
+    @Named("fileMessageQueue")
+    private val fileTransferQueue: MessageQueue<FileTransferQueueMessage>,
     @Named("batchQueue") private val outputQueue: MultiProducerChannel<BatchEnvelope<*>>,
 ) : ProcessFileTaskFactory {
     override fun make(

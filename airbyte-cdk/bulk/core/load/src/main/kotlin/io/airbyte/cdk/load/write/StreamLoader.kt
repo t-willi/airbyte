@@ -51,8 +51,10 @@ interface StreamLoader : BatchAccumulator {
 
     suspend fun start() {}
     suspend fun createBatchAccumulator(): BatchAccumulator = this
-    suspend fun createFileBatchAccumulator(taskLauncher: DestinationTaskLauncher,
-                                           outputQueue: MultiProducerChannel<BatchEnvelope<*>>,): BatchAccumulator = this
+    suspend fun createFileBatchAccumulator(
+        taskLauncher: DestinationTaskLauncher,
+        outputQueue: MultiProducerChannel<BatchEnvelope<*>>,
+    ): BatchAccumulator = this
 
     suspend fun processFile(file: DestinationFile): Batch
     suspend fun processBatch(batch: Batch): Batch = SimpleBatch(Batch.State.COMPLETE)
