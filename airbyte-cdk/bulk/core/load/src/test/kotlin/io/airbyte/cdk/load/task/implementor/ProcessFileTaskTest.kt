@@ -9,6 +9,8 @@ import io.airbyte.cdk.load.command.DestinationStream
 import io.airbyte.cdk.load.message.Batch
 import io.airbyte.cdk.load.message.BatchEnvelope
 import io.airbyte.cdk.load.message.DestinationFile
+import io.airbyte.cdk.load.message.MessageQueue
+import io.airbyte.cdk.load.message.MultiProducerChannel
 import io.airbyte.cdk.load.message.SimpleBatch
 import io.airbyte.cdk.load.state.SyncManager
 import io.airbyte.cdk.load.task.DestinationTaskLauncher
@@ -25,10 +27,12 @@ class ProcessFileTaskTest {
     private val taskLauncher: DestinationTaskLauncher = mockk(relaxed = true)
     private val syncManager: SyncManager = mockk(relaxed = true)
     private val file: DestinationFile = mockk(relaxed = true)
+    private val inputQueue: MessageQueue<FileTransferQueueMessage> = mockk(relaxed = true)
+    private val outputQueue: MultiProducerChannel<BatchEnvelope<*>> = mockk(relaxed = true)
     private val index = 1234L
 
     val defaultProcessFileTask =
-        DefaultProcessFileTask(stream, taskLauncher, syncManager, file, index)
+        DefaultProcessFileTask(syncManager, taskLauncher, inputQueue, outputQueue)
 
     @Test
     fun `the the file process task execution`() = runTest {
