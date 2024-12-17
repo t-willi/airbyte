@@ -28,7 +28,7 @@ abstract class IcebergV2WriteTest(
         IcebergV2Specification::class.java,
         IcebergV2DataDumper,
         destinationCleaner,
-        NoopExpectedRecordMapper,
+        IcebergRecordMapper,
         isStreamSchemaRetroactive = true,
         supportsDedup = false,
         stringifySchemalessObjects = true,
