@@ -37,6 +37,7 @@ abstract class IcebergV2WriteTest(
         commitDataIncrementally = false,
         supportFileTransfer = false,
         allTypesBehavior = StronglyTyped(),
+        nullEqualsUnset = true,
     ) {
     @Test
     @Disabled(
@@ -61,7 +62,7 @@ abstract class IcebergV2WriteTest(
     }
 
     @Test
-    @Disabled
+//    @Disabled
     override fun testContainerTypes() {
         super.testContainerTypes()
     }
@@ -81,7 +82,7 @@ abstract class IcebergV2WriteTest(
     }
 
     @Test
-    @Disabled
+//    @Disabled
     override fun testUnions() {
         super.testUnions()
     }
@@ -95,7 +96,17 @@ class IcebergGlueWriteTest :
                 IcebergV2TestUtil.parseConfig(IcebergV2TestUtil.GLUE_CONFIG_PATH)
             )
         ),
-    )
+    ) {
+    @Test
+    override fun testContainerTypes() {
+        super.testContainerTypes()
+    }
+
+    @Test
+    override fun testUnions() {
+        super.testUnions()
+    }
+}
 
 @Disabled(
     "This is currently disabled until we are able to make it run via airbyte-ci. It works as expected locally"
